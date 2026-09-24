@@ -20,46 +20,57 @@ x   x  x  x  x  x  x  x  x  x
 se o dígito for maior que 9, se considera 0
 
 */
-let cpf = '705.484.450-52'
-let cpfLimpo = cpf.replace(/\D+/g, '');
+let cpfRecebido = '705.484.450-52'
+let cpfLimpo = cpfRecebido.replace(/\D+/g, '');
 cpfArray = Array.from(cpfLimpo);
 
-
 cpfArray.pop();
 cpfArray.pop();
-// console.log(cpfArray);
 
-//const resultado = cpfArray.map((num, indx) => num * (10 - indx));
 
-// -- Pegando o primeiro Dígito
+function validarCPF(){
+ // -- Pegando o primeiro Dígito
 const somaTotal1 = cpfArray.reduce((acum, num, indx) => acum + num * (10 - indx), 0);
-console.log(somaTotal1);
+// console.log(somaTotal1);
 const primeiroDigito = 11 - (somaTotal1 % 11);
-console.log(primeiroDigito);
+// console.log(primeiroDigito);
 
 cpfArray.push(primeiroDigito.toString());
-console.log(cpfArray);
+// console.log(cpfArray);
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 //pegando o segundo dígito
 const somaTotal2 = cpfArray.reduce((acum, num, indx) => acum + num * (11 - indx), 0);
-console.log(somaTotal2);
+// console.log(somaTotal2);
 const segundoDigito = 11 - (somaTotal2 % 11);
-console.log(segundoDigito);
+// console.log(segundoDigito);
 
 cpfArray.push(segundoDigito.toString());
-console.log(cpfArray);
+// console.log(cpfArray);
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 //Validando o resultado dos get do primeiro e segundo dígito com o CPF inserido incialmente.
 
 const re1 = cpfArray.reduce((acc, item) => acc + item, "");
-console.log(re1);
+// console.log(re1);
 
-const validador = function(){
-    return re1 === cpfLimpo ? true : false;
+
+return re1;
 }
 
-console.log(validador());
+const novoCPF = validarCPF();
+
+function validador(){
+     if(novoCPF === cpfLimpo){
+        return console.log(`O cpf ${cpfRecebido} é valido!`)
+    } else  {
+        return console.log(`O cpf ${cpfRecebido} não é valido! Verfique os valores inseridos e tente novamente!`)
+    }
+    // return novoCPF === cpfLimpo ? true : false;
+}
+
+validador();
+
+validarCPF();
