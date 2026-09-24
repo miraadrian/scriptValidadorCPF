@@ -1,4 +1,4 @@
-// 280.086.730-28
+// 705.484.450-52 && 070.987.720-03
 /*
 
 7   0  5  4  8  4  4  5  0
@@ -20,57 +20,54 @@ x   x  x  x  x  x  x  x  x  x
 se o dígito for maior que 9, se considera 0
 
 */
-let cpfRecebido = '280.086.730-28'
-let cpfLimpo = cpfRecebido.replace(/\D+/g, '');
-cpfArray = Array.from(cpfLimpo);
 
-cpfArray.pop();
-cpfArray.pop();
+function ValidaCPF(cpfEnviado){
+    Object.defineProperty(this, 'cpfLimpo', {
+        enumerable: true,
+        get: function(){
+            return cpfEnviado.replace(/\D+/g, '');
+        }
+    })
 
-
-function validarCPF(){
- // -- Pegando o primeiro Dígito
-const somaTotal1 = cpfArray.reduce((acum, num, indx) => acum + num * (10 - indx), 0);
-// console.log(somaTotal1);
-const primeiroDigito = 11 - (somaTotal1 % 11);
-// console.log(primeiroDigito);
-
-cpfArray.push(primeiroDigito.toString());
-// console.log(cpfArray);
-
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-//pegando o segundo dígito
-const somaTotal2 = cpfArray.reduce((acum, num, indx) => acum + num * (11 - indx), 0);
-// console.log(somaTotal2);
-const segundoDigito = 11 - (somaTotal2 % 11);
-// console.log(segundoDigito);
-
-cpfArray.push(segundoDigito.toString());
-// console.log(cpfArray);
-
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-//Validando o resultado dos get do primeiro e segundo dígito com o CPF inserido incialmente.
-
-const re1 = cpfArray.reduce((acc, item) => acc + item, "");
-// console.log(re1);
-
-
-return re1;
 }
 
-const novoCPF = validarCPF();
+ValidaCPF.prototype.valida = function(){
+    if(typeof this.cpfLimpo === 'undefined') return false;
+    if(this.cpfLimpo.length !== 11) return false;
+    if(this.isSequencia()) return false;
 
-function validador(){
-     if(novoCPF === cpfLimpo){
-        return console.log(`O cpf ${cpfRecebido} é valido!`)
-    } else  {
-        return console.log(`O cpf ${cpfRecebido} não é valido! Verfique os valores inseridos e tente novamente!`)
-    }
-    // return novoCPF === cpfLimpo ? true : false;
+    const cpfParc = this.cpfLimpo.slice(0, -2);
+    const digito1 = this.validaDigito(cpfParc);
+    const digito2 = this.validaDigito(cpfParc + digito1);
+
+    const novoCPF = cpfParc + digito1 + digito2;
+
+    return novoCPF === this.cpfLimpo;
 }
 
-validador();
+ValidaCPF.prototype.validaDigito = function(cpfParcial){
+    const cpfArray = Array.from(cpfParcial);
+    let regressivo = cpfArray.length + 1;
+    let total = cpfArray.reduce((acm, val) =>{
+        acm += (regressivo * Number(val));
+        regressivo--;
+        return acm;
+    }, 0);
 
-validarCPF();
+    const digito = 11 - (total % 11);
+    return digito > 9 ? '0' : String(digito);
+
+};
+
+ValidaCPF.prototype.isSequencia = function(){
+    const sequencia = this.cpfLimpo[0].repeat(this.cpfLimpo.length);
+    return sequencia === this.cpfLimpo;
+}
+
+const cpf = new ValidaCPF('705.484.350-52');
+
+if(cpf.valida()) {
+    console.log(`CPF Válido`)
+} else {
+    console.log(`CPF INVÁLIDO`)
+}
