@@ -1,4 +1,4 @@
-// 705.484.450-52 && 070.987.720-03
+// 280.086.730-28
 /*
 
 7   0  5  4  8  4  4  5  0
@@ -20,7 +20,7 @@ x   x  x  x  x  x  x  x  x  x
 se o dígito for maior que 9, se considera 0
 
 */
-let cpfRecebido = '705.484.450-52'
+let cpfRecebido = '280.086.730-28'
 let cpfLimpo = cpfRecebido.replace(/\D+/g, '');
 cpfArray = Array.from(cpfLimpo);
 
